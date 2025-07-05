@@ -1,29 +1,27 @@
 import express from 'express';
-import { Limits } from '../constants.js';
 import cors from 'cors';
-import cookieParser from 'cookie-parsesr'
+import {Limits} from './constants.js';
+import cookieParser from 'cookie-parser';
 
-const app=express();
+let app=express();
 
-app.use(cors(
-    {
-        origin:process.env.CORS_ORIGIN,
-        credentials:true
-    }
-))
+app.use(cors({
+    origin:process.env.CORS_ORIGIN,
+    credential:true
+}));
 
-app.use(express.json(
+app.use(express.json({
+   limit:Limits.json
+}));
+
+app.use(express.urlencoded(
     {
         limit:Limits.json
     }
-))
+));
 
-app.use(express.urlencoded({
-    limit:Limits.json,
-    extended:true
-}))
-app.use(express.static("public"))
+app.use(express.static("public"));
 
-app.use(cookieParser())
+app.use(cookieParser());
 
-export { app }
+export {app}
