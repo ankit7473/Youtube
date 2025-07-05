@@ -60,4 +60,29 @@ userSchema.pre("save", async function (next){
 userSchema.methods.isposswordcorrect=async function (password) {
      return await bcrypt.compare("password",this.password);
 }
+userSchema.methods.generatRefreshToken=function (){
+    jwt.sign(
+        {
+            _id:this._id,
+            email:this.email,
+            username:this.userId,
+            fullName:this.fullname
+        },
+        process.env.ACCESSS_TOKEN_SECRET,
+        {
+           expiresIn: process.env.ACCESSS_TOKEN_EXPIRY
+        }
+    )
+}
+userSchema.methods.generatRefreshToken=function (){
+    jwt.sign(
+        {
+            _id:this._id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+           expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+        }
+    )
+}
 export const User = mongoose.model("User", userSchema);
