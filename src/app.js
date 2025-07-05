@@ -7,7 +7,7 @@ let app=express();
 
 app.use(cors({
     origin:process.env.CORS_ORIGIN,
-    credential:true
+    credentials:true
 }));
 
 app.use(express.json({
@@ -23,5 +23,16 @@ app.use(express.urlencoded(
 app.use(express.static("public"));
 
 app.use(cookieParser());
+
+
+// routes import 
+
+import router from './routes/user.routes.js';
+
+// routes declaration
+
+app.use("/api/v1/users",router)
+
+// URL = http://localhost:5000/api/v1/users/register
 
 export {app}
