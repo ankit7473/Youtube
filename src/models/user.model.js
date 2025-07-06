@@ -1,4 +1,4 @@
-import { raw } from "body-parser";
+
 import mongoose, { Schema } from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
@@ -66,7 +66,7 @@ userSchema.methods.generatRefreshToken=function (){
             _id:this._id,
             email:this.email,
             username:this.userId,
-            fullName:this.fullname
+            fullname:this.fullname
         },
         process.env.ACCESSS_TOKEN_SECRET,
         {

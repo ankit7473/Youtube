@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "dev": "nodemon --exec node -r dotenv/config --experimental-json-modules ./src/index.js"
+    "dev": "nodemon --ext js,json,env src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
-    "mongoose-aggregate-paginate-v2": "^1.1.4"
+    "mongoose-aggregate-paginate-v2": "^1.1.4",
+    "multer": "^2.0.1"
   }
 }
