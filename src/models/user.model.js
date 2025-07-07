@@ -12,7 +12,7 @@ let userSchema = new Schema(
         trim:true,
         index:true
     },
-    emial:{
+    email:{
         type:String,
         required:true,
         unique:true,
@@ -25,7 +25,7 @@ let userSchema = new Schema(
         required:true,
         index:true
     },
-    avtar:{
+    avatar:{
         type:String, // cloudinary 
         required:true
     },

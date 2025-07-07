@@ -1,7 +1,6 @@
-import "dotenv/config"; // Load .env once (remove manual config())
+
 import { app } from './app.js';
 import connectDB from './db/index.js';
-
 connectDB()
   .then(() => {
     app.on("error", (err) => {
@@ -11,6 +10,7 @@ connectDB()
 
     app.listen(process.env.PORT || 5000, () => {
       console.log(`Server running on port ${process.env.PORT}`);
+       console.log(process.env.CLOUD_NAME);
     });
   })
   .catch((err) => {
@@ -18,6 +18,7 @@ connectDB()
     process.exit(1); // Force restart
   });
 
+ 
 
 
 
