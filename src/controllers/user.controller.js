@@ -68,19 +68,19 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
         coveImage:coverImage?.url||"",
      })
 
-  //    // STEP 7
-  //  const createdUser= await User.findById(user._id).select(
-  //   "-password -refreshToken"
-  //  );
+     // STEP 7
+   const createdUser= await User.findById(user._id).select(
+    "-password -refreshToken"
+   );
 
-  //  if(!createdUser){
-  //   throw new ApiError(500,"something went wrong while registering the user")
-  //  };
+   if(!createdUser){
+    throw new ApiError(500,"something went wrong while registering the user")
+   };
 
-  //  // STEP 8 
-  //  return res.status(200).json(
-  //   new ApiResponse(200,createdUser,"User registered successfully")
-  //  );
+   // STEP 8 
+   return res.status(200).json(
+    new ApiResponse(200,createdUser,"User registered successfully")
+   );
    
 
     })
