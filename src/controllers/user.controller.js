@@ -4,8 +4,6 @@ import {ApiError} from '../utils/ApiError.js';
 import {uploadOnCloudinary} from '../utils/cloudinary.js';
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-
-<<<<<<< HEAD
 const generateAccessAndRefreshToken=async(Id)=>{
   try {
     const user=await User.findById(Id);
@@ -22,8 +20,7 @@ const generateAccessAndRefreshToken=async(Id)=>{
 }
 
 
-=======
->>>>>>> 9828a793bfb6decd0162beb5d8c43d15961a4280
+
 const registerUser=asyncHandler(
   async  (req,res)=>{
        // STEPS FOR REGISTERING THE USER 
@@ -104,7 +101,7 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
     })
 
-<<<<<<< HEAD
+
 
     const loginUser=asyncHandler(async(req,res)=>{
       
@@ -137,7 +134,7 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
       // STEP 3
 
-     const isPasswordValid= await user.isposswordcorrect(password);
+     const isPasswordValid= await user.isPasswordCorrect(password);
      if(!isPasswordValid){
       throw new ApiError(404,"Wrong password entered")
      }
@@ -191,6 +188,5 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
     })
 
 export {registerUser,loginUser,logoutUser};
-=======
-export {registerUser};
->>>>>>> 9828a793bfb6decd0162beb5d8c43d15961a4280
+
+
