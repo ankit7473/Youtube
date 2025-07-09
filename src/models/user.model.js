@@ -58,6 +58,7 @@ userSchema.pre("save", async function (next){
     this.password=await bcrypt.hash(this.password,10);
     next();
 } )
+<<<<<<< HEAD
 
 
 userSchema.methods.isposswordcorrect=async function (password) {
@@ -66,6 +67,11 @@ userSchema.methods.isposswordcorrect=async function (password) {
 
 
 
+=======
+userSchema.methods.isposswordcorrect=async function (password) {
+     return await bcrypt.compare("password",this.password);
+}
+>>>>>>> 9828a793bfb6decd0162beb5d8c43d15961a4280
 userSchema.methods.generatRefreshToken=function (){
     jwt.sign(
         {
@@ -80,7 +86,11 @@ userSchema.methods.generatRefreshToken=function (){
         }
     )
 }
+<<<<<<< HEAD
 userSchema.methods.generatAccessToken=function (){
+=======
+userSchema.methods.generatRefreshToken=function (){
+>>>>>>> 9828a793bfb6decd0162beb5d8c43d15961a4280
     jwt.sign(
         {
             _id:this._id,
