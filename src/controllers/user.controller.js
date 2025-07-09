@@ -3,12 +3,13 @@ import { User} from  "../models/user.model.js";
 import {ApiError} from '../utils/ApiError.js';
 import {uploadOnCloudinary} from '../utils/cloudinary.js';
 import { ApiResponse } from "../utils/ApiResponse.js";
+import jwt from 'jsonwebtoken';
 
 const generateAccessAndRefreshToken=async(Id)=>{
   try {
     const user=await User.findById(Id);
-    const refreshToken=user.generatRefreshToken();
-    const accessToken=user.generatAccessToken();
+    const refreshToken=user.generateRefreshToken();
+    const accessToken=user.generateAccessToken();
     user.refreshToken=refreshToken;
     await user.save({validateBeforeSave:false});
 
@@ -37,7 +38,8 @@ const registerUser=asyncHandler(
 
        // STEP 1 
       const {fullname,email,userId,password}  = req.body
-  
+
+
 
       // STEP 2 
       if(
@@ -83,7 +85,7 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
         userId:userId.toLowerCase(),
         coveImage:coverImage?.url||"",
      })
-
+// 
      // STEP 7
    const createdUser= await User.findById(user._id).select(
     "-password -refreshToken"
@@ -93,15 +95,12 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
     throw new ApiError(500,"something went wrong while registering the user")
    };
 
+   console.log("User has registered successfully");
    // STEP 8 
    return res.status(200).json(
     new ApiResponse(200,createdUser,"User registered successfully")
    );
-   
-
     })
-
-
 
     const loginUser=asyncHandler(async(req,res)=>{
       
@@ -116,9 +115,10 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
       // STEP 6. SEND THE RESPONSE
 
       // STEP 1 
-      const {userId,password,email}=res.body;
+      const {userId,password,email}=req.body;
+      console.log(email,password,userId);
 
-      if(!userId || !email){
+      if(!(userId || email)){
         throw new ApiError(400,"User with this email or userId required");
       };
 
@@ -147,7 +147,7 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
       // STEP 5
       const options ={
-        httpsOnly:true,
+        httpOnly:true,
         secure:true
       }
 
@@ -163,7 +163,7 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
     })
 
     const logoutUser=asyncHandler(async(req,res)=>{
-        User.findByIdAndUpdate(
+        await  User.findByIdAndUpdate(
           req.user._id,
           {
             $set:{
@@ -176,17 +176,53 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
         )
 
          const options ={
-        httpsOnly:true,
+        httpOnly:true,
         secure:true
       }
 
       res
       .status(200)
-      .clearCookie("refreshToke",options)
+      .clearCookie("refreshToken",options)
       .clearCookie("accessToken",options)
       .json(new ApiResponse(200,{},"User logged Out"))
     })
 
-export {registerUser,loginUser,logoutUser};
+    const refreshAccessToken=asyncHandler(async(req,res)=>{
+     const encodedIncomingRefreshToken= req.cookies.refreshToken || req.body.refreshToken;
+     if(!encodedIncomingRefreshToken){
+      throw new ApiError(400,"unauthorize refresh token");
+     }
+
+     const decodedIncomingRefreshToken=jwt.verify(encodedIncomingRefreshToken,REFRESH_TOKEN_SECRET
+     )
+
+    const user=User.findById(decodedIncomingRefreshToken?._id);
+     if(!user){
+      throw new ApiError(404,"unauthorize refresh token");
+     }
+
+     if(encodedIncomingRefreshToken!==user?.refreshToken){
+      throw new ApiError(400,"refresh token is expired or used");
+     }
+
+    const  options={
+      httpOnly:true,
+      secure:true
+     }
+
+     const {newRefreshToken,accessToken}= await generateAccessAndRefreshToken(user._id);
+
+
+     res.
+     status(200).
+     cookie("refreshToken",newRefreshToken,options).
+     cookie("accessToken",accessToken,options).
+     json(200,{
+          accessToken,refreshToken:newRefreshToken
+     }," new refreshToken and accessToken have generated"
+    )
+    })
+
+export {registerUser,loginUser,logoutUser,refreshAccessToken};
 
 
