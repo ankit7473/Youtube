@@ -11,6 +11,7 @@ const generateAccessAndRefreshToken=async(Id)=>{
     const refreshToken=user.generateRefreshToken();
     const accessToken=user.generateAccessToken();
     user.refreshToken=refreshToken;
+    user.accessToken=accessToken;
     await user.save({validateBeforeSave:false});
 
     return {refreshToken,accessToken};
@@ -116,7 +117,7 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
       // STEP 1 
       const {userId,password,email}=req.body;
-      console.log(email,password,userId);
+      // console.log(email,password,userId);
 
       if(!(userId || email)){
         throw new ApiError(400,"User with this email or userId required");
@@ -129,7 +130,7 @@ const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
       })
 
       if(!user){
-        throw new ApiError(404,"User does not exist")
+        throw new ApiError(404,"User does not exist with this email or userId")
       }
 
       // STEP 3
